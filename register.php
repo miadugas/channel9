@@ -2,6 +2,7 @@
 
 require_once("includes/config.php");
 require_once("includes/classes/FormSanitizer.php");
+require_once("includes/classes/Constants.php");
 require_once("includes/classes/Account.php");
       
 $account = new Account($con);
@@ -16,7 +17,8 @@ if(isset($_POST["submitButton"])) {
         $password = FormSanitizer::sanitizeFormPassword($_POST["password"]);
         $password2 = FormSanitizer::sanitizeFormPassword($_POST["password2"]);
 
-        
+        $account->register($firstName, $lastName, $username, $email, $email2, $password, $password2);
+
     }
 ?>
 <!DOCTYPE html>
@@ -32,18 +34,21 @@ if(isset($_POST["submitButton"])) {
     <div class="column">
 
     <div class="header">
-    
-    <img src="assets/images/logo1.png" title="Logo" alt="Site logo" />
+    <img src="assets/images/logo2.png" title="Logo" alt="Site logo" />
         <h3>Sign Up</h3>
         <span>to continue to Channel 9</span>
-</div>
+    </div>
 
     <form method="POST">
 
+        <?php echo $account->getError(Constants::$firstNameCharacters); ?>
         <input type="text" name="firstName" placeholder="First name" required>
 
+        <?php echo $account->getError(Constants::$lastNameCharacters); ?>
         <input type="text" name="lastName" placeholder="Last name" required>
-
+        
+        <?php echo $account->getError(Constants::$usernameCharacters); ?>
+        <?php echo $account->getError(Constants::$usernameTaken); ?>
         <input type="text" name="username" placeholder="Username" required>
 
         <input type="email" name="email" placeholder="Email" required>
