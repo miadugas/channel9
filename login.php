@@ -2,6 +2,7 @@
     if(isset($_POST["submitButton"])) {
                
         $firstName = sanitizeFormString($_POST["firstName"]);
+        echo "Form was submitted";
     }
 ?>
 <!DOCTYPE html>
@@ -18,7 +19,7 @@
 
     <div class="header">
     
-    <img src="assets/images/logo.png" title="Logo" alt="Site logo" />
+    <img src="assets/images/logo1.png" title="Logo" alt="Site logo" />
         <h3>Sign In</h3>
         <span>to continue to Channel 9</span>
 </div>

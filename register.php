@@ -1,7 +1,12 @@
 <?php
 
+require_once("includes/config.php");
 require_once("includes/classes/FormSanitizer.php");
-      if(isset($_POST["submitButton"])) {
+require_once("includes/classes/Account.php");
+      
+$account = new Account($con);
+
+if(isset($_POST["submitButton"])) {
         
         $firstName = FormSanitizer::sanitizeFormString($_POST["firstName"]);
         $lastName = FormSanitizer::sanitizeFormString($_POST["lastName"]);
@@ -11,6 +16,7 @@ require_once("includes/classes/FormSanitizer.php");
         $password = FormSanitizer::sanitizeFormPassword($_POST["password"]);
         $password2 = FormSanitizer::sanitizeFormPassword($_POST["password2"]);
 
+        
     }
 ?>
 <!DOCTYPE html>
@@ -27,7 +33,7 @@ require_once("includes/classes/FormSanitizer.php");
 
     <div class="header">
     
-    <img src="assets/images/logo.png" title="Logo" alt="Site logo" />
+    <img src="assets/images/logo1.png" title="Logo" alt="Site logo" />
         <h3>Sign Up</h3>
         <span>to continue to Channel 9</span>
 </div>
