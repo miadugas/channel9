@@ -39,7 +39,10 @@ if(isset($_POST["submitButton"])) {
         <title>Welcome to Channel 9</title>
         <link rel="stylesheet" type="text/css" href="assets/style/style.css?v=<?php echo time(); ?>"/>
     </head>
-    <body>
+    <style> 
+
+</style>
+    <body >
         
 <div class="signInContainer">
 
