@@ -17,8 +17,14 @@ if(isset($_POST["submitButton"])) {
         $password = FormSanitizer::sanitizeFormPassword($_POST["password"]);
         $password2 = FormSanitizer::sanitizeFormPassword($_POST["password2"]);
 
-        $account->register($firstName, $lastName, $username, $email, $email2, $password, $password2);
-
+        $success = $account->register($firstName, $lastName, $username, $email, $email2, $password, $password2);
+        
+        if($success) {
+            // Store session
+            $_SESSION["userLoggedIn"] = $username;
+            
+            header("Location: index.php");
+        }
     }
 ?>
 <!DOCTYPE html>
