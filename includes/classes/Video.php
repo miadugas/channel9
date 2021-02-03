@@ -45,12 +45,12 @@ class Video {
         return $this->sqlData["episode"];
     }
 
-
-
-
-
-
-
-
+    // logic for tracking views
+    public function incrementViews() {
+        $query = $this->con->prepare("UPDATE videos SET views=views+1 WHERE id=:id");
+        $query->bindValue(":id", $this->getId());
+        $query->execute();
+    }
 }
+
 ?>
