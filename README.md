@@ -2,6 +2,7 @@
 
 ![Image of Channel9-01](https://github.com/miadugas/channel9/blob/main/assets/images/logo2.png)
 
+![Image of Channel9-01](https://github.com/miadugas/channel9/blob/main/assets/images/logo2.png)
 
 Channel 9 is a subscription streaming video service for classic cult movies and shows.
 
