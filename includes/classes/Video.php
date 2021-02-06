@@ -45,12 +45,59 @@ class Video {
         return $this->sqlData["episode"];
     }
 
+    public function getSeasonNumber() {
+        return $this->sqlData["season"];
+    }
+
+    public function getEntityId() {
+        return $this->sqlData["entityId"];
+    }
+
     // logic for tracking views
     public function incrementViews() {
         $query = $this->con->prepare("UPDATE videos SET views=views+1 WHERE id=:id");
         $query->bindValue(":id", $this->getId());
         $query->execute();
     }
+
+    public function getSeasonAndEpisode() {
+    if($this->isMovie()) {
+        return;
+    }
+
+    $season = $this->getSeasonNumber();
+    $episode = $this->getEpisodeNumber();
+
+    return "Season $season, Episode $episode";
 }
 
+// checking to see if video is a movie
+    public function isMovie() {
+    return $this->sqlData["isMovie"] == 1;
+}
+
+// show continue if user was been watching a speficic program on the play button
+public function isInProgress($username) {
+    $query = $this->con->prepare("SELECT * FROM videoProgress
+                                WHERE videoId=:videoId AND username=:username");
+                                
+    $query->bindValue(":videoId", $this->getId());
+    $query->bindValue(":username", $username);
+    $query->execute();
+
+    return $query->rowCount() != 0;
+}
+
+public function hasSeen($username) {
+    $query = $this->con->prepare("SELECT * FROM videoProgress
+                                WHERE videoId=:videoId AND username=:username
+                                AND finished=1");
+
+    $query->bindValue(":videoId", $this->getId());
+    $query->bindValue(":username", $username);
+    $query->execute();
+
+    return $query->rowCount() != 0;
+    }
+}
 ?>
