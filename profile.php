@@ -1,11 +1,16 @@
 <?php
 require_once("includes/header.php");
+require_once("includes/paypalConfig.php");
  require_once("includes/classes/Account.php");
  require_once("includes/classes/FormSanitizer.php");
  require_once("includes/classes/Constants.php");
+ require_once("includes/classes/BillingDetails.php");
+
+ $user = new User($con, $userLoggedIn);
 
  $detailsMessage = "";
  $passwordMessage = "";
+ $subscriptionMessage = "";
 
  if(isset($_POST["saveDetailsButton"])) {
      $account = new Account($con);
@@ -51,7 +56,44 @@ if(isset($_POST["savePasswordButton"])) {
      }
  }
 
- 
+ if (isset($_GET['success']) && $_GET['success'] == 'true') {
+    $token = $_GET['token'];
+    $agreement = new \PayPal\Api\Agreement();
+
+    $subscriptionMessage = "<div class='alertError'>
+                            Oh dear! Something went wrong!
+                            </div>";
+  
+    try {
+    // Execute agreement
+      $agreement->execute($token, $apiContext);
+      
+      
+      $result = BillingDetails::insertDetails($con, $agreement, $token, $userLoggedIn);      
+    // True if both worked
+      $result = $result && $user->setIsSubscribed(1);
+
+      if($result) {
+          $subscriptionMessage = "<div class='alertSuccess'>
+                          You're all signed up!
+                      </div>";
+      }
+
+    // Update user's account status
+
+    } catch (PayPal\Exception\PayPalConnectionException $ex) {
+      echo $ex->getCode();
+      echo $ex->getData();
+      die($ex);
+    } catch (Exception $ex) {
+      die($ex);
+    }
+} 
+    else if (isset($_GET['success']) && $_GET['success'] == 'false') {  
+        $subscriptionMessage = "<div class='alertError'>
+                          User cancelled or something went wrong!
+                      </div>";
+    }
 
 ?>
 
@@ -64,7 +106,6 @@ if(isset($_POST["savePasswordButton"])) {
             <h2>User details</h2>
             
             <?php
-             $user = new User($con, $userLoggedIn);
 
             $firstName = isset($_POST["firstName"]) ? $_POST["firstName"] : $user->getFirstName();
             $lastName = isset($_POST["lastName"]) ? $_POST["lastName"] : $user->getLastName();
@@ -110,10 +151,14 @@ if(isset($_POST["savePasswordButton"])) {
     <div class="formSection">
         <h2>Subscription</h2>
 
+        <div class="message">
+            <?php echo $subscriptionMessage; ?>
+        </div>
+
         <?php
 
         if($user->getIsSubscribed()) {
-            echo "<h3>You are subscribed! Go to PayPal to cancel.</h3>";
+            echo "<h3>You are subscribed! You can go to PayPal at anytime to cancel.</h3>";
         }
         else {
             echo "<a href='billing.php'>Subscribe to Channel9</a>";

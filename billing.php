@@ -13,8 +13,14 @@ use PayPal\Api\ShippingAddress;
 $agreement = new Agreement();
 $agreement->setName('Subscription to Channel 9')
   ->setDescription('Recurring payments of 0.99 to Channel 9')
+  // If charging an upfront fee 
+  // ->setDescription('$.99 setup fee then recurring payments of 0.99 to Channel 9')
+
   // 7 day Trial before billing starts
   ->setStartDate(gmdate("Y-m-d\TH:i:s\Z", strtotime("+7 days", time())));
+  
+  // Setup fee upfront bill after 30 days
+  // ->setStartDate(gmdate("Y-m-d\TH:i:s\Z", strtotime("+1 month", time())));
 
 // Set plan id
 $plan = new Plan();

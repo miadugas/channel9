@@ -33,6 +33,8 @@ $merchantPreferences->setReturnUrl($returnUrl . "?success=true")
   ->setAutoBillAmount('yes')
   ->setInitialFailAmountAction('CONTINUE')
   ->setMaxFailAttempts('0');
+  // Want to charge an upfront setup fee?
+  // ->setSetupFee(new Currency(array('value' => 0.99, 'currency' => 'USD')));
 
 $plan->setPaymentDefinitions(array($paymentDefinition));
 $plan->setMerchantPreferences($merchantPreferences);
